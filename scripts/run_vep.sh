@@ -6,7 +6,6 @@ plugdir=/home/.vep/Plugins/
 myinput=$1
 myoutput=$2
 ncores="${3:-1}"
-echo $ncores
 gene=$4
 pick="--per_gene"
 if [ -z "${gene}" ]; then

@@ -13,7 +13,7 @@ fi
 # read getopt’s output this way to handle the quoting right:
 eval set -- "$PARSED"
 
-input_path= output_path= c=1 gene=
+input_path= output_path= c=1 g=
 # now enjoy the options in order and nicely split until we see --
 while true; do
     case "$1" in
@@ -75,7 +75,7 @@ cd /workingdir
 
 echo "Running VEP..."
 vep_out=$(basename $input_path .vcf)_vep.vcf
-time /home/scripts/run_vep.sh $input_path $vep_out $ncores $gene
+/home/scripts/run_vep.sh $input_path $vep_out $c $g
 echo "Finished running VEP..."
 
 echo "Processing VEP output..."

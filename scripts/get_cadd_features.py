@@ -28,7 +28,6 @@ def get_cadd_features(path, threads=1):
     chroms.extend(['Y', 'X'])
     out = []
     for chrom in chroms:
-        #conn = sqlite3.connect('/cadddb/cadd' + str(chrom) + '_compressed.db', isolation_level='DEFERRED')
         conn = genomicsqlite.connect(
                 '/cadddb/cadd' + str(chrom) + '_compressed.db',
                 read_only=True,
