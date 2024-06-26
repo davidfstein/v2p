@@ -6,11 +6,17 @@ higher throughput, offline installation may be a better option.
 
 ## Download the V2P repository
 
-```git clone ```
+```
+git clone 
+```
 Set the V2P working directory to the location that you cloned the repository.
-```export V2P_DIR=/path/to/dir```
+```
+export V2P_DIR=/path/to/dir
+```
 You can add this to your bash config if you would like it to persist.
-```echo "export V2P_DIR=/path/to/dir" >> ~/.bashrc```
+```
+echo "export V2P_DIR=/path/to/dir" >> ~/.bashrc
+```
 
 ## Install dependencies
 
@@ -47,10 +53,10 @@ disk space requirement (~806GB).
 wget "link to precomputed"
 ```
 
-## Running V2P
+# Running V2P
 
 The input to V2P is a VCF file containing the variants you wish to score in hg38 coordinates. 
-The VCF file must contain "#CHROM   POS ID  REF ALT QUAL    FILTER  INFO" in the header. 
+The VCF file must contain `#CHROM   POS ID  REF ALT QUAL    FILTER  INFO` in the header. 
 Other header lines are not required.
 
 To run V2P provide the path to the VCF, a path where the output will be stored, and the path to the downloaded features.
