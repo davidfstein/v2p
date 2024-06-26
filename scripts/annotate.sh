@@ -67,7 +67,6 @@ echo Input path: $input_path
 echo Output path: $output_path
 echo "# cpus: $c"
 echo Gene: $g
-exit 0
 
 mkdir /workingdir
 cp $input_path /workingdir
