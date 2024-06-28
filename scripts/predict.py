@@ -46,7 +46,7 @@ NAMES = {'HP:0033127': 'Musculoskeletal',
 
 # Load additional annotations and training data
 X_train_cols = pd.read_csv(PROJECT_DIR + '/data/train_columns.csv', header=None)[0].tolist()
-X_train_symbols = set(pd.read_csv(PROJECT_DIR + '/data/train_symbols.csv').tolist())
+X_train_symbols = set(pd.read_csv(PROJECT_DIR + '/data/train_symbols.csv')['SYMBOL'].tolist())
 genedata = pd.read_parquet(PROJECT_DIR + '/data/gene_data.pq')
 
 def generate_train(X_train_columns, predictor):

@@ -16,6 +16,7 @@ dependencies:
   - scipy=1.10.0=py39h7360e5f_0
   - sqlite=3.44.2=h2c6b66d_0
   - tqdm=4.64.1=pyhd8ed1ab_0
+  - pytabix
   - pip=23.0
   - pip:
     - arrow==1.2.3

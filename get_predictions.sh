@@ -1,77 +1,66 @@
 #!/usr/bin/env bash
 
-LONGOPTS=input:,output:,cpu:,gene:,precomputed:,annotations:,help
-OPTIONS=i:o:c:g:p:a:h
+usage() {
+    echo "Parameter usage:
+          -i input            path to input vcf (required)
+          -o output           path to annotation output parquet file (required)
+          -a annotations      absolute path to annotations (required)
+          -p precomputed      path to precomputed predictions (optional)
+          -c cpu              number of CPUs (optional)
+          -g [gene]           annotate specific gene (optional)
+          -h help             print this message and exit"
+}
 
-! PARSED=$(getopt --options=$OPTIONS --longoptions=$LONGOPTS --name "$0" -- "$@")
-if [[ ${PIPESTATUS[0]} -ne 0 ]]; then
-    # e.g. return value is 1
-    #  then getopt has complained about wrong arguments to stdout
-    echo "Please provide input and output paths."
-    exit 2
-fi
-# read getopt’s output this way to handle the quoting right:
-eval set -- "$PARSED"
+input_path=""
+output_path=""
+c=1
+g=""
+precomputed_path=""
+annotation_path=""
 
-input_path= output_path= c=1 g= precomputed_path= annotation_path=
-# now enjoy the options in order and nicely split until we see --
-while true; do
-    case "$1" in
-        -i|--input)
-            input_path="$2"
-            shift 2
+while getopts ":i:o:c::g::p::a:h" opt; do
+    case ${opt} in
+        i )
+            input_path=$OPTARG
             ;;
-        -o|--output)
-            output_path="$2"
-            shift 2
+        o )
+            output_path=$OPTARG
             ;;
-        -c|--cpu)
-            c="$2"
-            shift 2
+        c )
+            c=$OPTARG
             ;;
-        -g|--gene)
-            g="$2"
-            shift 2
+        g )
+            g=$OPTARG
             ;;
-        -p|--precomputed)
-            precomputed_path="$2"
-            shift 2
+        p )
+            precomputed_path=$OPTARG
             ;;
-        -a|--annotations)
-            annotation_path="$2"
-            shift 2
+        a )
+            annotation_path=$OPTARG
             ;;
-        -h|--help)
-            echo "Parameter usage: 
-                 -i|--input            path to input vcf (required)
-                 -o|--output           path to annotation output parquet file (required)
-                 -a|--annotations      absolute path to annotations (required)
-                 -p|--precomputed      path to precomputed predictions
-                 -c|--cpu              # of cpus 
-                 -g|--gene             annotate specfic gene
-                 -h|--help             print this message and exit"
-            shift
-            exit 0;
-            ;;    
-        --)
-            shift
-            break
+        h )
+            usage
+            exit 0
             ;;
-        *)
-            echo "Programming error"
-            exit 3
+        \? )
+            echo "Invalid option: -$OPTARG" 1>&2
+            usage
+            exit 1
+            ;;
+        : )
+            echo "Option -$OPTARG requires an argument" 1>&2
+            usage
+            exit 1
             ;;
     esac
 done
+shift $((OPTIND -1))
 
-if [[ -z $input_path ]]; then
-  echo "An input file is required"
-  exit 1
-fi
-
-if [[ -z $output_path ]]; then
-  echo "An output path is required"
-  exit 1
+# Check required parameters
+if [ -z "$input_path" ] || [ -z "$output_path" ] || [ -z "$annotation_path" ]; then
+    echo "Error: Input, output, and annotations paths are required."
+    usage
+    exit 1
 fi
 
 PRECOMPUTED_TMPFILE=$(mktemp)
