@@ -41,7 +41,7 @@ ORDER = ['musculoskeletal', 'limbs', 'nervous', 'metabolism', 'head', 'cardiovas
          'immune', 'integument', 'blood', 'digestive', 'neoplasm', 'respiratory', 'endocrine', 'ear', 'cellular',
          'prenatal', 'growth', 'constitutional', 'breast', 'voice', 'thoracic', 'Pathogenic', 'uid']
 
-train_symbols = set(pd.read_csv(PROJECT_DIR + '/data/train_symbols.csv').tolist())
+train_symbols = set(pd.read_csv(PROJECT_DIR + '/data/train_symbols.csv')['SYMBOL'].tolist())
 tb = tabix.open(PROJECT_DIR + '/data/symbols.tsv.gz')
 
 data = pd.read_csv(sys.argv[1], sep='\t')

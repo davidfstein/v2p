@@ -1,72 +1,16 @@
 #!/usr/bin/env bash
 
-LONGOPTS=input:,output:,cpu:,gene:,help
-OPTIONS=i:o:c:g:h
-
-! PARSED=$(getopt --options=$OPTIONS --longoptions=$LONGOPTS --name "$0" -- "$@")
-if [[ ${PIPESTATUS[0]} -ne 0 ]]; then
-    # e.g. return value is 1
-    #  then getopt has complained about wrong arguments to stdout
-    echo "Please provide an input file and an output path."
-    exit 2
-fi
-# read getopt’s output this way to handle the quoting right:
-eval set -- "$PARSED"
-
-input_path= output_path= c=1 g=
-# now enjoy the options in order and nicely split until we see --
-while true; do
-    case "$1" in
-        -i|--input)
-            input_path="$2"
-            shift 2
-            ;;
-        -o|--output)
-            output_path="$2"
-            shift 2
-            ;;
-        -c|--cpu)
-            c="$2"
-            shift 2
-            ;;
-        -g|--gene)
-            g="$2"
-            shift 2
-            ;;
-        -h|--help)
-            echo "Parameter usage: -i|--input path/to/input.vcf (required)
-                 -o|--output path/to/output.pq (required)
-                 -c|--cpu # of cpus 
-                 -g|--gene annotate specfic gene
-                 -h|--help print this message and exit"
-            shift
-            exit 0;
-            ;;    
-        --)
-            shift
-            break
-            ;;
-        *)
-            echo "Programming error"
-            exit 3
-            ;;
-    esac
-done
-
-if [[ -z $input_path ]]; then
-  echo "An input file is required"
-  exit 1
-fi
-
-if [[ -z $output_path ]]; then
-  echo "An output path is required"
-  exit 1
-fi
+input_path=$1
+output_path=$2
+c=$3
+g=$4
 
 echo Input path: $input_path
 echo Output path: $output_path
 echo "# cpus: $c"
-echo Gene: $g
+if [[ -z $g ]]; then
+    echo Gene: $g
+fi
 
 mkdir /workingdir
 cp $input_path /workingdir

@@ -68,7 +68,7 @@ if [[ ${precomputed_path} ]]; then
     python ${V2P_DIR}/scripts/getPrecomputed.py $input_path ${PRECOMPUTED_TMPFILE} ${precomputed_path}
 fi
 
-docker run --rm -v $(pwd):/home -v ${annotation_path}:/cadddb dstein96/hpo -i $input_path -o $(basename $input_path .vcf)_annotations.pq -c $c -g $g
+docker run --rm -v $(pwd):/home -v ${annotation_path}:/cadddb dstein96/hpo $input_path $(basename $input_path .vcf)_annotations.pq $c $g
 
 python ${V2P_DIR}/scripts/predict.py $(basename $input_path .vcf)_annotations.pq
 
