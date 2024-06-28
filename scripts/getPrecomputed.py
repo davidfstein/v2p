@@ -65,6 +65,10 @@ NAMES_HPO = {'Musculoskeletal': 'HP:0033127',
 ORDER = ['musculoskeletal', 'limbs', 'nervous', 'metabolism', 'head', 'cardiovascular', 'genitourinary', 'eye',
          'immune', 'integument', 'blood', 'digestive', 'neoplasm', 'respiratory', 'endocrine', 'ear', 'cellular',
          'prenatal', 'growth', 'constitutional', 'breast', 'voice', 'thoracic', 'Pathogenic', 'uid']
+OUT_ORDER = ['Musculoskeletal','Limbs','Nervous','Metabolism/homeostasis','Head/neck','Cardiovascular','Genitourinary',
+             'Eye','Immune','Integument','Blood/blood-forming tissues','Digestive','Neoplasm','Respiratory','Endocrine',
+             'Ear','Cellular','Prenatal development/birth','Growth','Constitutional','Breast','Voice','Thoracic cavity',
+             'Pathogenic','V2P_predicted_phenotypes','ID']
 
 train_symbols = set(pd.read_csv(PROJECT_DIR + '/data/train_symbols.csv')['SYMBOL'].tolist())
 tb = tabix.open(PROJECT_DIR + '/data/symbols.csv.gz')
@@ -132,8 +136,11 @@ for chrom in chroms:
     snp_rows['V2P_predicted_phenotypes'] = get_crisp(snp_rows, snp_symbols)
     indel_rows['V2P_predicted_phenotypes'] = get_crisp(indel_rows, indel_symbols)
 
-    snp_rows.to_csv(tmpfile, index=None, header=None, mode='a+')
-    indel_rows.to_csv(tmpfile, index=None, header=None, mode='a+')
+    file_exists = os.path.exists(tmpfile)
+    header = None if file_exists else True
+    mode = 'a+' if file_exists else 'w+'
+    snp_rows.rename(columns={'uid':'ID'})[OUT_ORDER].to_csv(tmpfile, index=None, header=header, mode=mode)
+    indel_rows.rename(columns={'uid':'ID'})[OUT_ORDER].to_csv(tmpfile, index=None, header=header, mode=mode)
 
 found = pd.read_csv(tmpfile, header=None)
 data = data.loc[~data['ID'].isin(found[found.columns[-1]])]
