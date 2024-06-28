@@ -7,7 +7,7 @@ higher throughput, offline installation may be a better option.
 ## Download the V2P repository
 
 ```
-git clone 
+git clone https://github.com/davidfstein/v2p.git
 ```
 Set the V2P working directory to the location that you cloned the repository.
 ```
@@ -60,8 +60,9 @@ The VCF file must contain `#CHROM   POS ID  REF ALT QUAL    FILTER  INFO` in the
 Other header lines are not required.
 
 To run V2P provide the path to the VCF, a path where the output will be stored, and the path to the downloaded features.
-You may optionally pass a number of CPUs to be used (default=1) and, if scoring variants from a single gene, you may provide 
-a gene name to be prioritized by VEP. Run ```bash get_predictions.sh -h``` for a description of the available parameters.
+You may optionally pass the path to the precomputed predictions, a number of CPUs to be used (default=1) and, 
+if scoring variants from a single gene, you may provide a gene name to be prioritized by VEP. 
+Run ```bash get_predictions.sh -h``` for a description of the available parameters.
 
 Example
 ```

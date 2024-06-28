@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-LONGOPTS=input:,output:,cpu:,gene:,help
-OPTIONS=i:o:c:g:h
+LONGOPTS=input:,output:,cpu:,gene:,precomputed:,annotations:,help
+OPTIONS=i:o:c:g:p:a:h
 
 ! PARSED=$(getopt --options=$OPTIONS --longoptions=$LONGOPTS --name "$0" -- "$@")
 if [[ ${PIPESTATUS[0]} -ne 0 ]]; then
