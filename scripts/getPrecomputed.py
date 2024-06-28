@@ -82,15 +82,15 @@ def get_crisp(df, symbols):
     crisp = []
     for index, (_, r) in enumerate(df.iterrows()):
         CUTOFFS = TRAIN_CUTOFFS if symbols[index] in train_symbols else TEST_CUTOFFS
-        rc = [NAMES[l] for p, l in zip(r, df.columns) if l != 'uid' and p >= CUTOFFS[NAMES_HPO[NAMES[l]]]]
+        rc = [l for p, l in zip(r, df.columns) if l != 'ID' and p >= CUTOFFS[NAMES_HPO[l]]]
         if not rc:
             rc = ['Benign']
         crisp.append(','.join(rc))
     return crisp
 
 def get_symbols(df):
-    chrom = df['uid'].apply(lambda v: v.split('_')[0])
-    pos = df['uid'].apply(lambda v: v.split('_')[1])
+    chrom = df['ID'].apply(lambda v: v.split('_')[0])
+    pos = df['ID'].apply(lambda v: v.split('_')[1])
     symbols = []
     for c, p in zip(chrom, pos):
         q = c + ':' + p + '-' + p
@@ -127,8 +127,8 @@ for chrom in chroms:
         read_only=True,
     )
 
-    snp_rows = pd.DataFrame(get_predictions(snp_dbconn), columns=ORDER)
-    indel_rows = pd.DataFrame(get_predictions(indel_dbconn), columns=ORDER)
+    snp_rows = pd.DataFrame(get_predictions(snp_dbconn), columns=[NAMES[c] for c in ORDER])
+    indel_rows = pd.DataFrame(get_predictions(indel_dbconn), columns=[NAMES[c] for c in ORDER])
 
     snp_symbols = get_symbols(snp_rows)
     indel_symbols = get_symbols(indel_rows)
@@ -139,9 +139,9 @@ for chrom in chroms:
     file_exists = os.path.exists(tmpfile)
     header = None if file_exists else True
     mode = 'a+' if file_exists else 'w+'
-    snp_rows.rename(columns={'uid':'ID'})[OUT_ORDER].to_csv(tmpfile, index=None, header=header, mode=mode)
-    indel_rows.rename(columns={'uid':'ID'})[OUT_ORDER].to_csv(tmpfile, index=None, header=header, mode=mode)
+    snp_rows[OUT_ORDER].to_csv(tmpfile, index=None, header=header, mode=mode)
+    indel_rows[OUT_ORDER].to_csv(tmpfile, index=None, header=header, mode=mode)
 
-found = pd.read_csv(tmpfile, header=None)
-data = data.loc[~data['ID'].isin(found[found.columns[-1]])]
+found = pd.read_csv(tmpfile, usecols='ID')
+data = data.loc[~data['ID'].isin(found['ID'])]
 data.to_csv(sys.argv[1], index=None, sep='\t')
