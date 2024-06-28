@@ -72,7 +72,7 @@ docker run --rm -v $(pwd):/home -v ${annotation_path}:/cadddb dstein96/hpo $inpu
 
 python ${V2P_DIR}/scripts/predict.py $(basename $input_path .vcf)_annotations.pq
 
-python ${V2P_DIR}/scripts/merge.py ${PRECOMPUTED_TMPFILE} $(basename $1 .vcf)_annotations_preds.csv 
+python ${V2P_DIR}/scripts/merge_output.py ${PRECOMPUTED_TMPFILE} $(basename $1 .vcf)_annotations_preds.csv 
 
 rm $PRECOMPUTED_TMPFILE
 rm $(basename $1 .vcf)_annotations.pq 

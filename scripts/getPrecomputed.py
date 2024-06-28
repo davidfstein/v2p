@@ -37,12 +37,37 @@ NAMES = {'musculoskeletal': 'Musculoskeletal',
  'thoracic': 'Thoracic cavity',
  'Pathogenic': 'Pathogenic'}
 
+NAMES_HPO = {'Musculoskeletal': 'HP:0033127',
+ 'Limbs': 'HP:0040064',
+ 'Nervous': 'HP:0000707',
+ 'Metabolism/homeostasis': 'HP:0001939',
+ 'Head/neck': 'HP:0000152',
+ 'Cardiovascular': 'HP:0001626',
+ 'Genitourinary': 'HP:0000119',
+ 'Eye': 'HP:0000478',
+ 'Immune': 'HP:0002715',
+ 'Integument': 'HP:0001574',
+ 'Blood/blood-forming tissues': 'HP:0001871',
+ 'Digestive': 'HP:0025031',
+ 'Neoplasm': 'HP:0002664',
+ 'Respiratory': 'HP:0002086',
+ 'Endocrine': 'HP:0000818',
+ 'Ear': 'HP:0000598',
+ 'Cellular': 'HP:0025354',
+ 'Prenatal development/birth': 'HP:0001197',
+ 'Growth': 'HP:0001507',
+ 'Constitutional': 'HP:0025142',
+ 'Breast': 'HP:0000769',
+ 'Voice': 'HP:0001608',
+ 'Thoracic cavity': 'HP:0045027',
+ 'Pathogenic': 'Pathogenic'}
+
 ORDER = ['musculoskeletal', 'limbs', 'nervous', 'metabolism', 'head', 'cardiovascular', 'genitourinary', 'eye',
          'immune', 'integument', 'blood', 'digestive', 'neoplasm', 'respiratory', 'endocrine', 'ear', 'cellular',
          'prenatal', 'growth', 'constitutional', 'breast', 'voice', 'thoracic', 'Pathogenic', 'uid']
 
 train_symbols = set(pd.read_csv(PROJECT_DIR + '/data/train_symbols.csv')['SYMBOL'].tolist())
-tb = tabix.open(PROJECT_DIR + '/data/symbols.tsv.gz')
+tb = tabix.open(PROJECT_DIR + '/data/symbols.csv.gz')
 
 data = pd.read_csv(sys.argv[1], sep='\t')
 chroms = list(data['#CHROM'].unique())
@@ -53,23 +78,23 @@ def get_crisp(df, symbols):
     crisp = []
     for index, (_, r) in enumerate(df.iterrows()):
         CUTOFFS = TRAIN_CUTOFFS if symbols[index] in train_symbols else TEST_CUTOFFS
-        rc = [NAMES[l] for p, l in zip(r, df.columns) if p >= CUTOFFS[l]]
+        rc = [NAMES[l] for p, l in zip(r, df.columns) if l != 'uid' and p >= CUTOFFS[NAMES_HPO[NAMES[l]]]]
         if not rc:
             rc = ['Benign']
         crisp.append(','.join(rc))
     return crisp
 
 def get_symbols(df):
-    chrom = df['uid'].apply(lambda v: v.split('_')[1])
-    pos = df['uid'].apply(lambda v: v.split('_')[0])
+    chrom = df['uid'].apply(lambda v: v.split('_')[0])
+    pos = df['uid'].apply(lambda v: v.split('_')[1])
     symbols = []
     for c, p in zip(chrom, pos):
         q = c + ':' + p + '-' + p
-        res = tb.querys(q)
+        res = list(tb.querys(q))
         if not res:
             symbols.append(None)
         else:
-            symbols.append(res[0])
+            symbols.append(res[0][0])
     return symbols
 
 def get_predictions(conn):
