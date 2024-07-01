@@ -35,7 +35,8 @@ NAMES = {'musculoskeletal': 'Musculoskeletal',
  'breast': 'Breast',
  'voice': 'Voice',
  'thoracic': 'Thoracic cavity',
- 'Pathogenic': 'Pathogenic'}
+ 'Pathogenic': 'Pathogenic',
+ 'uid': 'ID'}
 
 NAMES_HPO = {'Musculoskeletal': 'HP:0033127',
  'Limbs': 'HP:0040064',
@@ -73,7 +74,8 @@ OUT_ORDER = ['Musculoskeletal','Limbs','Nervous','Metabolism/homeostasis','Head/
 train_symbols = set(pd.read_csv(PROJECT_DIR + '/data/train_symbols.csv')['SYMBOL'].tolist())
 tb = tabix.open(PROJECT_DIR + '/data/symbols.csv.gz')
 
-data = pd.read_csv(sys.argv[1], sep='\t')
+data = pd.read_csv(sys.argv[1], sep='\t', low_memory=False)
+data['ID'] = data.apply(lambda r: '_'.join([str(r['#CHROM']), str(int(r['POS'])),r['REF'], r['ALT']]), axis=1) 
 chroms = list(data['#CHROM'].unique())
 
 tmpfile = sys.argv[2]
@@ -136,12 +138,13 @@ for chrom in chroms:
     snp_rows['V2P_predicted_phenotypes'] = get_crisp(snp_rows, snp_symbols)
     indel_rows['V2P_predicted_phenotypes'] = get_crisp(indel_rows, indel_symbols)
 
-    file_exists = os.path.exists(tmpfile)
-    header = None if file_exists else True
-    mode = 'a+' if file_exists else 'w+'
+    file_populated = os.path.exists(tmpfile) and os.stat(tmpfile).st_size > 0
+    header = None if file_populated else True
+    mode = 'a+' if file_populated else 'w+'
     snp_rows[OUT_ORDER].to_csv(tmpfile, index=None, header=header, mode=mode)
-    indel_rows[OUT_ORDER].to_csv(tmpfile, index=None, header=header, mode=mode)
+    indel_rows[OUT_ORDER].to_csv(tmpfile, index=None, header=None, mode='a+')
 
-found = pd.read_csv(tmpfile, usecols='ID')
+found = pd.read_csv(tmpfile, usecols=['ID'])
 data = data.loc[~data['ID'].isin(found['ID'])]
-data.to_csv(sys.argv[1], index=None, sep='\t')
+outname = '.'.join(sys.argv[1].split('.')[:-1]) + '_novel.vcf'
+data.to_csv(outname, index=None, sep='\t')

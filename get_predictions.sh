@@ -67,6 +67,7 @@ PRECOMPUTED_TMPFILE=$(mktemp)
 if [[ ${precomputed_path} ]]; then
     echo "Retrieving precomputed predictions..."
     python ${V2P_DIR}/scripts/getPrecomputed.py $input_path ${PRECOMPUTED_TMPFILE} ${precomputed_path}
+    input_path=$(basename $input_path .vcf)_novel.vcf
 fi
 
 echo "Annotating novel variants..."
@@ -76,10 +77,10 @@ echo "Predicting novel variant impact..."
 python ${V2P_DIR}/scripts/predict.py $(basename $input_path .vcf)_annotations.pq
 
 echo "Merging output..."
-python ${V2P_DIR}/scripts/merge_output.py ${PRECOMPUTED_TMPFILE} $(basename $1 .vcf)_annotations_preds.csv 
+python ${V2P_DIR}/scripts/merge_output.py ${PRECOMPUTED_TMPFILE} $(basename $input_path .vcf)_annotations_preds.csv 
 
 rm $PRECOMPUTED_TMPFILE
-rm $(basename $1 .vcf)_annotations.pq 
+rm -f $(basename $input_path .vcf)_annotations.pq 
 
-mv $(basename $1 .vcf)_annotations_preds.csv ${output_path}
+mv $(basename $input_path .vcf)_annotations_preds.csv ${output_path}
 echo "Done"

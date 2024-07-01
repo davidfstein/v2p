@@ -1,2 +1,5 @@
 *.db
 .vep
+*.pyc
+*.vcf
+__pycache__

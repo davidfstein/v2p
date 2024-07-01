@@ -2,7 +2,7 @@
 
 input_path=$1
 output_path=$2
-c=$3
+c=${3:-1}
 g=$4
 
 echo Input path: $input_path
@@ -42,7 +42,7 @@ python /home/scripts/get_uniprot_pos.py ${data_path}
 echo "Finished mapping..."
 
 echo "Retrieving additional variant annotations..."
-python /home/scripts/get_all.py ${data_path} $(basename ${data_path} .pq)_additional.pq $ncores
+python /home/scripts/get_all.py ${data_path} $(basename ${data_path} .pq)_additional.pq $c
 rm lookup_ids.csv 
 echo "Done retrieving additional annotations..."
 
