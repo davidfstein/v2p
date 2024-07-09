@@ -76,11 +76,12 @@ docker run --rm -v $(pwd):/home -v ${annotation_path}:/cadddb dstein96/hpo $inpu
 echo "Predicting novel variant impact..."
 python ${V2P_DIR}/scripts/predict.py $(basename $input_path .vcf)_annotations.pq
 
-echo "Merging output..."
-python ${V2P_DIR}/scripts/merge_output.py ${PRECOMPUTED_TMPFILE} $(basename $input_path .vcf)_annotations_preds.csv 
+if [[ ${precomputed_path} ]]; then
+	echo "Merging output..."
+	python ${V2P_DIR}/scripts/merge_output.py ${PRECOMPUTED_TMPFILE} $(basename $input_path .vcf)_annotations_preds.csv 
+	rm $PRECOMPUTED_TMPFILE
+fi
 
-rm $PRECOMPUTED_TMPFILE
 rm -f $(basename $input_path .vcf)_annotations.pq 
-
 mv $(basename $input_path .vcf)_annotations_preds.csv ${output_path}
 echo "Done"
