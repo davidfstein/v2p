@@ -70,6 +70,7 @@ OUT_ORDER = ['Musculoskeletal','Limbs','Nervous','Metabolism/homeostasis','Head/
              'Pathogenic','V2P_predicted_phenotypes','ID']
 
 data = pd.read_csv(sys.argv[1], sep='\t', low_memory=False)
+data['#CHROM'] = data['#CHROM'].apply(lambda v: str(v).replace('chr',''))
 data['ID'] = data.apply(lambda r: '_'.join([str(r['#CHROM']), str(int(r['POS'])),r['REF'], r['ALT']]), axis=1) 
 chroms = list(data['#CHROM'].unique())
 
@@ -84,12 +85,12 @@ def get_crisp(df):
         crisp.append(','.join(rc))
     return crisp
 
-def get_predictions(conn):
+def get_predictions(conn, variants):
     cursor = conn.cursor()
     query = f'''
     SELECT {','.join(ORDER)} 
     FROM predictions 
-    WHERE uid IN {repr(tuple(map(str, snps['ID'].tolist())))}
+    WHERE uid IN {repr(tuple(map(str, variants['ID'].tolist())))}
     '''
     cursor.execute(query)
     return cursor.fetchall()
@@ -110,8 +111,8 @@ for chrom in chroms:
         read_only=True,
     )
 
-    snp_rows = pd.DataFrame(get_predictions(snp_dbconn), columns=[NAMES[c] for c in ORDER])
-    indel_rows = pd.DataFrame(get_predictions(indel_dbconn), columns=[NAMES[c] for c in ORDER])
+    snp_rows = pd.DataFrame(get_predictions(snp_dbconn, snps), columns=[NAMES[c] for c in ORDER])
+    indel_rows = pd.DataFrame(get_predictions(indel_dbconn, indels), columns=[NAMES[c] for c in ORDER])
 
     snp_rows['V2P_predicted_phenotypes'] = get_crisp(snp_rows)
     indel_rows['V2P_predicted_phenotypes'] = get_crisp(indel_rows)
