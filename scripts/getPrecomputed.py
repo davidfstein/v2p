@@ -78,7 +78,7 @@ tmpfile = sys.argv[2]
 
 def get_crisp(df):
     crisp = []
-    for index, (_, r) in enumerate(df.iterrows()):
+    for _, r in df.iterrows():
         rc = [l for p, l in zip(r, df.columns) if l != 'ID' and p >= CUTOFFS[NAMES_HPO[l]]]
         if not rc:
             rc = ['Benign']
@@ -90,7 +90,7 @@ def get_predictions(conn, variants):
     query = f'''
     SELECT {','.join(ORDER)} 
     FROM predictions 
-    WHERE uid IN {repr(tuple(map(str, variants['ID'].tolist())))}
+    WHERE uid IN {repr(tuple(map(str, variants['ID'].tolist() + [''])))}
     '''
     cursor.execute(query)
     return cursor.fetchall()
@@ -111,8 +111,12 @@ for chrom in chroms:
         read_only=True,
     )
 
-    snp_rows = pd.DataFrame(get_predictions(snp_dbconn, snps), columns=[NAMES[c] for c in ORDER])
-    indel_rows = pd.DataFrame(get_predictions(indel_dbconn, indels), columns=[NAMES[c] for c in ORDER])
+    snp_rows = pd.DataFrame(columns=[NAMES[c] for c in ORDER])
+    indel_rows = pd.DataFrame(columns=[NAMES[c] for c in ORDER])
+    if not snps.empty:
+        snp_rows = pd.DataFrame(get_predictions(snp_dbconn, snps), columns=[NAMES[c] for c in ORDER])
+    if not indels.empty:
+        indel_rows = pd.DataFrame(get_predictions(indel_dbconn, indels), columns=[NAMES[c] for c in ORDER])
 
     snp_rows['V2P_predicted_phenotypes'] = get_crisp(snp_rows)
     indel_rows['V2P_predicted_phenotypes'] = get_crisp(indel_rows)

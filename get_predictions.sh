@@ -70,17 +70,26 @@ if [[ ${precomputed_path} ]]; then
     input_path=$(basename $input_path .vcf)_novel.vcf
 fi
 
-echo "Annotating novel variants..."
-docker run --rm -v $(pwd):/home -v ${annotation_path}:/cadddb dstein96/hpo $input_path $(basename $input_path .vcf)_annotations.pq $c $g
+if [[ $(wc -l < ${input_path}) -ge 2 ]]; then
+    SORT_TMPFILE=$(mktemp)
+    echo "#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\n" > ${SORT_TMPFILE}
+    grep -v "^#" ${input_path} | sort -k1,1V -k2,2n >> ${SORT_TMPFILE}
+    mv ${SORT_TMPFILE} ${input_path}
 
-echo "Predicting novel variant impact..."
-python ${V2P_DIR}/scripts/predict.py $(basename $input_path .vcf)_annotations.pq
+    echo "Annotating novel variants..."
+    docker run --rm -v $(pwd):/home -v ${annotation_path}:/cadddb dstein96/hpo $input_path $(basename $input_path .vcf)_annotations.pq $c $g
 
-if [[ ${precomputed_path} ]]; then
+    echo "Predicting novel variant impact..."
+    python ${V2P_DIR}/scripts/predict.py $(basename $input_path .vcf)_annotations.pq
+fi
+
+if [ ${precomputed_path} ] && [ -f "$(basename $input_path .vcf)_annotations_preds.csv" ]; then
 	echo "Merging output..."
 	python ${V2P_DIR}/scripts/merge_output.py ${PRECOMPUTED_TMPFILE} $(basename $input_path .vcf)_annotations_preds.csv 
-	rm $PRECOMPUTED_TMPFILE
+elif [[ ! -f "$(basename $input_path .vcf)_annotations_preds.csv" ]]; then
+    mv ${PRECOMPUTED_TMPFILE} $(basename $input_path .vcf)_annotations_preds.csv
 fi
+rm $PRECOMPUTED_TMPFILE
 
 rm -f $(basename $input_path .vcf)_annotations.pq 
 mv $(basename $input_path .vcf)_annotations_preds.csv ${output_path}
