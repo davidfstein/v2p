@@ -64,10 +64,10 @@ NAMES_HPO = {'Musculoskeletal': 'HP:0033127',
 ORDER = ['musculoskeletal', 'limbs', 'nervous', 'metabolism', 'head', 'cardiovascular', 'genitourinary', 'eye',
          'immune', 'integument', 'blood', 'digestive', 'neoplasm', 'respiratory', 'endocrine', 'ear', 'cellular',
          'prenatal', 'growth', 'constitutional', 'breast', 'voice', 'thoracic', 'Pathogenic', 'uid']
-OUT_ORDER = ['Musculoskeletal','Limbs','Nervous','Metabolism/homeostasis','Head/neck','Cardiovascular','Genitourinary',
+OUT_ORDER = ['ID','V2P_predicted_phenotypes','Musculoskeletal','Limbs','Nervous','Metabolism/homeostasis','Head/neck','Cardiovascular','Genitourinary',
              'Eye','Immune','Integument','Blood/blood-forming tissues','Digestive','Neoplasm','Respiratory','Endocrine',
              'Ear','Cellular','Prenatal development/birth','Growth','Constitutional','Breast','Voice','Thoracic cavity',
-             'Pathogenic','V2P_predicted_phenotypes','ID']
+             'Pathogenic']
 
 data = pd.read_csv(sys.argv[1], sep='\t', low_memory=False)
 data['#CHROM'] = data['#CHROM'].apply(lambda v: str(v).replace('chr',''))
@@ -129,5 +129,5 @@ for chrom in chroms:
 
 found = pd.read_csv(tmpfile, usecols=['ID'])
 data = data.loc[~data['ID'].isin(found['ID'])]
-outname = '.'.join(sys.argv[1].split('.')[:-1]) + '_novel.vcf'
+outname = sys.argv[1].split('/')[-1].replace('.vcf', '_novel.vcf')
 data.to_csv(outname, index=None, sep='\t')
