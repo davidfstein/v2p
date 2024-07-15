@@ -70,9 +70,9 @@ if [[ ${precomputed_path} ]]; then
     input_path=$(basename $input_path .vcf)_novel.vcf
 fi
 
-if [[ $(wc -l < ${input_path}) -ge 2 ]]; then
+if [ -f  ${input_path} ] && [ $(wc -l < ${input_path}) -ge 2 ]; then
     SORT_TMPFILE=$(mktemp)
-    echo "#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\n" > ${SORT_TMPFILE}
+    echo -e "#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO" > ${SORT_TMPFILE}
     grep -v "^#" ${input_path} | sort -k1,1V -k2,2n >> ${SORT_TMPFILE}
     mv ${SORT_TMPFILE} ${input_path}
 
@@ -89,8 +89,8 @@ if [ ${precomputed_path} ] && [ -f "$(basename $input_path .vcf)_annotations_pre
 elif [[ ! -f "$(basename $input_path .vcf)_annotations_preds.csv" ]]; then
     mv ${PRECOMPUTED_TMPFILE} $(basename $input_path .vcf)_annotations_preds.csv
 fi
-rm $PRECOMPUTED_TMPFILE
 
-rm -f $(basename $input_path .vcf)_annotations.pq 
+rm -f $(basename $input_path .vcf)_annotations.pq $input_path
 mv $(basename $input_path .vcf)_annotations_preds.csv ${output_path}
+bash /home/david/Projects/pathophenic_back/utils/self_destroy.sh ${output_path} 86400 &
 echo "Done"
