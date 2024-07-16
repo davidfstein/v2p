@@ -25,17 +25,17 @@ V2P's dependencies may be installed with conda.
 Activate the conda environment.
 ```conda activate v2p```
 An additional python dependency must be installed after creating the conda environment.
-this only needs to be done once. 
+This only needs to be done once. 
 ```
 cd bin/scikit-multilearn
 pip install .
 ```
-V2P also requires an installation of docker to be available on the system.
+V2P also requires an installation of docker to be available on the system. See here for installation instructions: https://docs.docker.com/engine/install/.
 
 ### Download V2P data
 
 V2P relies on a large set of features to derive its predictions. These features are collected from Ensembl's VEP and other sources.
-In total, downloading the feature data requires ~590GB of free disk space. 
+In total, downloading the feature data requires ~564GB of free disk space. 
 ```
 wget -O ${V2P_DIR}/.vep "link to vep data"
 wget -O ${V2P_DIR}/hpo.db "link to hpo db"
