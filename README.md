@@ -37,8 +37,11 @@ V2P also requires an installation of docker to be available on the system. See h
 V2P relies on a large set of features to derive its predictions. These features are collected from Ensembl's VEP and other sources.
 In total, downloading the feature data requires ~564GB of free disk space. 
 ```
+cd v2p
+# These should be placed in the V2P repository directory
 wget -O ${V2P_DIR}/.vep "link to vep data"
 wget -O ${V2P_DIR}/hpo.db "link to hpo db"
+
 # This can be place anywhere on your system. You must provide the path to this data
 # when running V2P
 wget "link to cadd dbs"
