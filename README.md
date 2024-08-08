@@ -54,7 +54,10 @@ Precomputed predictions for all posible single nucleotide variants and gnomAD in
 Installation will result in greatly increased speed for most variant sets. However, there is an additional 
 disk space requirement (~806GB).
 ```
-wget "link to precomputed"
+wget https://v2p-data.s3.us-east-2.amazonaws.com/snv_predictions.tar.gz
+tar xzf snv_predictions.tar.gz
+wget https://v2p-data.s3.us-east-2.amazonaws.com/indel_predictions.tar.gz
+tar xzf indel_predictions.tar.gz
 ```
 
 # Running V2P
