@@ -1,5 +1,5 @@
 This repository contains instructions and code to run the Variant-to-Phenotype (V2P) variant effect predictor. For many users, accessing V2P 
-via our website, v2p.com, will be the best option. There, users may process up to 100,000 variants at a time. For advanced users or those who need 
+via our website, v2p.ai, will be the best option. There, users may process up to 100,000 variants at a time. For advanced users or those who need 
 higher throughput, offline installation may be a better option.
 
 # Installing V2P
