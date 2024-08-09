@@ -49,7 +49,9 @@ aws s3 cp s3://v2p-data/hpo.db.gz - | gunzip -c > ${V2P_DIR}/hpo.db
 
 # This can be placed anywhere on your system. You must provide the path to this data
 # when running V2P
-aws s3 cp s3://v2p-data/cadd.tar.gz - | tar xzf - > cadd_data
+mkdir cadd_data
+cd cadd_data
+aws s3 cp s3://v2p-data/cadd.tar.gz - | tar xzf -
 ```
 
 #### wget/curl download
@@ -61,7 +63,9 @@ wget -O - https://v2p-data.s3.us-east-2.amazonaws.com/hpo.db.gz | gunzip -c > ${
 
 # This can be placed anywhere on your system. You must provide the path to this data
 # when running V2P
-wget -O - https://v2p-data.s3.us-east-2.amazonaws.com/cadd.tar.gz | tar xzf - > cadd_data
+mkdir cadd_data
+cd cadd_data
+wget -O - https://v2p-data.s3.us-east-2.amazonaws.com/cadd.tar.gz | tar xzf -
 ```
 
 ## (Optional) Download precomputed variants
