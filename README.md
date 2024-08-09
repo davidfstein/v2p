@@ -39,8 +39,8 @@ In total, downloading the feature data requires ~564GB of free disk space.
 ```
 cd v2p
 # These should be placed in the V2P repository directory
-wget -O - https://v2p-data.s3.us-east-2.amazonaws.com/vep.tar.gz | tar xzf > ${V2P_DIR}/.vep
-wget -O - https://v2p-data.s3.us-east-2.amazonaws.com/hpo.db.gz | gunzip > ${V2P_DIR}/hpo.db
+wget -O - https://v2p-data.s3.us-east-2.amazonaws.com/vep.tar.gz | tar xzf - > ${V2P_DIR}/.vep
+wget -O - https://v2p-data.s3.us-east-2.amazonaws.com/hpo.db.gz | gunzip -c > ${V2P_DIR}/hpo.db
 
 # This can be place anywhere on your system. You must provide the path to this data
 # when running V2P
