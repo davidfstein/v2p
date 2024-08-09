@@ -36,16 +36,32 @@ V2P also requires an installation of docker to be available on the system. See h
 
 V2P relies on a large set of features to derive its predictions. These features are collected from Ensembl's VEP and other sources.
 In total, downloading the feature data requires ~564GB of free disk space. 
+
+Downloading data with the aws cli will be significantly faster than curl/wget. Both options are shown below, choose only one.
+See https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html for aws cli configuration.
+
+#### AWS cli download
+```
+cd v2p
+# These should be placed in the V2P repository directory
+aws s3 cp s3://v2p-data/vep.tar.gz - | tar xzf - > ${V2P_DIR}/.vep
+aws s3 cp s3://v2p-data/hpo.db.gz - | gunzip -c > ${V2P_DIR}/hpo.db
+
+# This can be placed anywhere on your system. You must provide the path to this data
+# when running V2P
+aws s3 cp s3://v2p-data/cadd.tar.gz - | tar xzf - > cadd_data
+```
+
+#### wget/curl download
 ```
 cd v2p
 # These should be placed in the V2P repository directory
 wget -O - https://v2p-data.s3.us-east-2.amazonaws.com/vep.tar.gz | tar xzf - > ${V2P_DIR}/.vep
 wget -O - https://v2p-data.s3.us-east-2.amazonaws.com/hpo.db.gz | gunzip -c > ${V2P_DIR}/hpo.db
 
-# This can be place anywhere on your system. You must provide the path to this data
+# This can be placed anywhere on your system. You must provide the path to this data
 # when running V2P
-wget https://v2p-data.s3.us-east-2.amazonaws.com/cadd.tar.gz
-tar xzf cadd.tar.gz
+wget -O - https://v2p-data.s3.us-east-2.amazonaws.com/cadd.tar.gz | tar xzf - > cadd_data
 ```
 
 ## (Optional) Download precomputed variants
@@ -53,11 +69,27 @@ tar xzf cadd.tar.gz
 Precomputed predictions for all posible single nucleotide variants and gnomAD indels are available for download. 
 Installation will result in greatly increased speed for most variant sets. However, there is an additional 
 disk space requirement (~806GB).
+
+#### AWS cli download
 ```
-wget https://v2p-data.s3.us-east-2.amazonaws.com/snv_predictions.tar.gz
-tar xzf snv_predictions.tar.gz
-wget https://v2p-data.s3.us-east-2.amazonaws.com/indel_predictions.tar.gz
-tar xzf indel_predictions.tar.gz
+aws s3 cp s3://v2p-data/snv_predictions.tar.gz - | tar xzf - > snv_predictions
+aws s3 cp s3://v2p-data/indel_predictions.tar.gz - | tar xzf - > indel_predictions
+
+mkdir predictions
+# Precomputed predictions must be in a single directory
+mv snv_predictions/* predictions/
+mv indel_predictions/* predictions/
+```
+
+#### wget/curl download
+```
+wget -O - https://v2p-data.s3.us-east-2.amazonaws.com/snv_predictions.tar.gz | tar xzf - > snv_predictions
+wget -O - https://v2p-data.s3.us-east-2.amazonaws.com/indel_predictions.tar.gz | tar xzf - > indel_predictions
+
+mkdir predictions
+# Precomputed predictions must be in a single directory
+mv snv_predictions/* predictions/
+mv indel_predictions/* predictions/
 ```
 
 # Running V2P
