@@ -72,24 +72,24 @@ disk space requirement (~806GB).
 
 #### AWS cli download
 ```
-aws s3 cp s3://v2p-data/snv_predictions.tar.gz - | tar xzf - > snv_predictions
-aws s3 cp s3://v2p-data/indel_predictions.tar.gz - | tar xzf - > indel_predictions
-
+# This can be placed anywhere on your system.
 mkdir predictions
-# Precomputed predictions must be in a single directory
-mv snv_predictions/* predictions/
-mv indel_predictions/* predictions/
+cd predictions 
+aws s3 cp s3://v2p-data/snv_predictions.tar.gz - | tar xzf -
+mv */db .
+aws s3 cp s3://v2p-data/indel_predictions.tar.gz - | tar xzf -
+mv */db .
 ```
 
 #### wget/curl download
 ```
-wget -O - https://v2p-data.s3.us-east-2.amazonaws.com/snv_predictions.tar.gz | tar xzf - > snv_predictions
-wget -O - https://v2p-data.s3.us-east-2.amazonaws.com/indel_predictions.tar.gz | tar xzf - > indel_predictions
-
+# This can be placed anywhere on your system.
 mkdir predictions
-# Precomputed predictions must be in a single directory
-mv snv_predictions/* predictions/
-mv indel_predictions/* predictions/
+cd predictions 
+wget -O - https://v2p-data.s3.us-east-2.amazonaws.com/snv_predictions.tar.gz | tar xzf -
+mv */db .
+wget -O - https://v2p-data.s3.us-east-2.amazonaws.com/indel_predictions.tar.gz | tar xzf -
+mv */db .
 ```
 
 # Running V2P
