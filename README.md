@@ -44,14 +44,14 @@ See https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html for
 ```
 cd v2p
 # These should be placed in the V2P repository directory
-aws s3 cp s3://v2p-data/vep.tar.gz - | tar xzf - > ${V2P_DIR}/.vep
-aws s3 cp s3://v2p-data/hpo.db.gz - | gunzip -c > ${V2P_DIR}/hpo.db
+aws s3 cp s3://v2p-data/vep.tar.gz - | pv | tar xzf - > ${V2P_DIR}/.vep
+aws s3 cp s3://v2p-data/hpo.db.gz - | pv | gunzip -c > ${V2P_DIR}/hpo.db
 
 # This can be placed anywhere on your system. You must provide the path to this data
 # when running V2P
 mkdir cadd_data
 cd cadd_data
-aws s3 cp s3://v2p-data/cadd.tar.gz - | tar xzf -
+aws s3 cp s3://v2p-data/cadd.tar.gz - | pv | tar xzf -
 ```
 
 #### wget/curl download
@@ -79,9 +79,9 @@ disk space requirement (~806GB).
 # This can be placed anywhere on your system.
 mkdir predictions
 cd predictions 
-aws s3 cp s3://v2p-data/snv_predictions.tar.gz - | tar xzf -
+aws s3 cp s3://v2p-data/snv_predictions.tar.gz - | pv | tar xzf -
 mv */db .
-aws s3 cp s3://v2p-data/indel_predictions.tar.gz - | tar xzf -
+aws s3 cp s3://v2p-data/indel_predictions.tar.gz - | pv | tar xzf -
 mv */db .
 ```
 
