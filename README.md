@@ -30,7 +30,7 @@ This only needs to be done once.
 cd bin/scikit-multilearn
 pip install .
 ```
-V2P also requires an installation of docker to be available on the system. See here for installation instructions: https://docs.docker.com/engine/install/.
+V2P also requires an installation of docker or singularity to be available on the system. See here for installation instructions: https://docs.docker.com/engine/install/.
 
 ### Download V2P data
 
@@ -109,5 +109,9 @@ Run ```bash get_predictions.sh -h``` for a description of the available paramete
 
 Example
 ```
-bash get_predictions.sh -i /path/to/input -o /path/to/output -a /path/to/annotations -c 5
+bash get_predictions.sh -i /path/to/input -o /path/to/output -a /path/to/annotations -p /path/to/precomputed_predictions -c 5
+```
+with singularity instead of docker
+```
+bash get_predictions.sh -i /path/to/input -o /path/to/output -a /path/to/annotations -p /path/to/precomputed_predictions -c 5 -s
 ```
