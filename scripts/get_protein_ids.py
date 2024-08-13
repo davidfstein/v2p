@@ -49,7 +49,7 @@ def main():
     gids.to_csv('lookup_ids.csv', index=None)
 
 if __name__ == '__main__':
-    conn = sqlite3.connect('/home/hpo.db', isolation_level='DEFERRED')
+    conn = sqlite3.connect('/home/myuser/work/hpo.db', isolation_level='DEFERRED')
     cursor = conn.cursor()
     try:
         # Optimizations

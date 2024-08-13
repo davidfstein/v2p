@@ -29,7 +29,7 @@ def get_snvbox_aa_features(data, cursor):
     return pd.DataFrame(out, columns=columns)
 
 def get_aa_features(path):
-    conn = sqlite3.connect('/home/hpo.db', isolation_level='DEFERRED')
+    conn = sqlite3.connect('/home/myuser/work/hpo.db', isolation_level='DEFERRED')
     cursor = conn.cursor()
     try:
         # Optimizations

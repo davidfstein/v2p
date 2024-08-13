@@ -144,7 +144,7 @@ def get_uniprot_mut_features(data, cursor, result_dict=None):
     return out 
 
 def get_proteinID_features(path, n_cores=1):
-    conn = sqlite3.connect('/home/hpo.db', isolation_level='DEFERRED')
+    conn = sqlite3.connect('/home/myuser/work/hpo.db', isolation_level='DEFERRED')
     cursor = conn.cursor()
     try:
         # Optimizations

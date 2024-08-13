@@ -29,7 +29,7 @@ def get_misc_gene_features(data, cursor):
     return pd.DataFrame(out, columns=[misc_gene_map[c] if c in misc_gene_map.keys() else c for c in columns])
 
 def get_geneID_features():
-    conn = sqlite3.connect('/home/hpo.db', isolation_level='DEFERRED')
+    conn = sqlite3.connect('/home/myuser/work/hpo.db', isolation_level='DEFERRED')
     cursor = conn.cursor()
     try:
         # Optimizations

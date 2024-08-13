@@ -8,6 +8,7 @@ usage() {
           -p precomputed      path to precomputed predictions (optional)
           -c cpu              number of CPUs (optional)
           -g [gene]           annotate specific gene (optional)
+          -s singularity      use singularity instead of docker (optional)
           -h help             print this message and exit"
 }
 
@@ -17,8 +18,9 @@ c=1
 g=""
 precomputed_path=""
 annotation_path=""
+s=""
 
-while getopts ":i:o:c::g::p::a:h" opt; do
+while getopts ":i:o:c::g::p::a:sh" opt; do
     case ${opt} in
         i )
             input_path=$OPTARG
@@ -37,6 +39,9 @@ while getopts ":i:o:c::g::p::a:h" opt; do
             ;;
         a )
             annotation_path=$OPTARG
+            ;;
+        s )
+            s="true"
             ;;
         h )
             usage
@@ -77,8 +82,11 @@ if [ -f  ${input_path} ] && [ $(wc -l < ${input_path}) -ge 2 ]; then
     mv ${SORT_TMPFILE} ${input_path}
 
     echo "Annotating novel variants..."
-    docker run --rm -v $(pwd):/home -v ${annotation_path}:/cadddb dstein96/hpo $input_path $(basename $input_path .vcf)_annotations.pq $c $g
-
+    if [ "$s" = "true" ]; then
+        singularity exec --containall --bind $(pwd):/home/myuser/work --bind ${annotation_path}:/mnt/cadddb docker://dstein96/v2p bash /home/myuser/work/scripts/sing_entry.sh $input_path $(basename $input_path .vcf)_annotations.pq $c $g
+    else
+        docker run --rm -v $(pwd):/home -v ${annotation_path}:/cadddb dstein96/hpo $input_path $(basename $input_path .vcf)_annotations.pq $c $g
+    fi
     echo "Predicting novel variant impact..."
     python ${V2P_DIR}/scripts/predict.py $(basename $input_path .vcf)_annotations.pq
 fi

@@ -1,7 +1,7 @@
-WRKDIR=/workingdir/
-cachedir=/home/.vep/
-ref_fasta=/home/.vep/Homo_sapiens.GRCh38.dna.primary_assembly.fa
-plugdir=/home/.vep/Plugins/
+WRKDIR=/home/myuser/work/tmp_output
+cachedir=/home/myuser/work/.vep/
+ref_fasta=/home/myuser/work/.vep/Homo_sapiens.GRCh38.dna.primary_assembly.fa
+plugdir=/home/myuser/work/.vep/Plugins/
 
 myinput=$1
 myoutput=$2
