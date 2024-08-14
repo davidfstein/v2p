@@ -37,7 +37,7 @@ V2P also requires an installation of docker or singularity to be available on th
 V2P relies on a large set of features to derive its predictions. These features are collected from Ensembl's VEP and other sources.
 In total, downloading the feature data requires ~564GB of free disk space. 
 
-Downloading data with the aws cli will be significantly faster than curl/wget. Both options are shown below, choose only one.
+Downloading data with the aws cli may be faster than curl/wget. Both options are shown below, choose only one.
 See https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html for aws cli configuration.
 
 #### AWS cli download
