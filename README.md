@@ -30,7 +30,7 @@ This only needs to be done once.
 cd bin/scikit-multilearn
 pip install .
 ```
-V2P also requires an installation of docker or singularity to be available on the system. See here for installation instructions: https://docs.docker.com/engine/install/.
+V2P also requires an installation of docker or singularity to be available on the system. See here for installation instructions: https://docs.docker.com/engine/install/. If using docker, be sure to add your user to the docker group: https://docs.docker.com/engine/install/linux-postinstall/.
 
 ### Download V2P data
 
