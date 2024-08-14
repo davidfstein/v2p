@@ -109,9 +109,9 @@ Run ```bash get_predictions.sh -h``` for a description of the available paramete
 
 Example
 ```
-bash get_predictions.sh -i /path/to/input -o /path/to/output -a /path/to/annotations -p /path/to/precomputed_predictions -c 5
+bash get_predictions.sh -i /path/to/input -o /path/to/output -a /absolute/path/to/annotations -p /path/to/precomputed_predictions -c 5
 ```
 with singularity instead of docker
 ```
-bash get_predictions.sh -i /path/to/input -o /path/to/output -a /path/to/annotations -p /path/to/precomputed_predictions -c 5 -s
+bash get_predictions.sh -i /path/to/input -o /path/to/output -a /absolute/path/to/annotations -p /path/to/precomputed_predictions -c 5 -s
 ```
