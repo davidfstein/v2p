@@ -85,7 +85,7 @@ if [ -f  ${input_path} ] && [ $(wc -l < ${input_path}) -ge 2 ]; then
     if [ "$s" = "true" ]; then
         singularity exec --containall --bind $(pwd):/home/myuser/work --bind ${annotation_path}:/mnt/cadddb docker://dstein96/v2p bash /home/myuser/work/scripts/sing_entry.sh $input_path $(basename $input_path .vcf)_annotations.pq $c $g
     else
-        docker run --rm -v $(pwd):/home -v ${annotation_path}:/cadddb dstein96/hpo $input_path $(basename $input_path .vcf)_annotations.pq $c $g
+        docker run --rm -v $(pwd):/home/myuser/work --user $(id -u):$(id -g) -v ${annotation_path}:/mnt/cadddb dstein96/v2p $input_path $(basename $input_path .vcf)_annotations.pq $c $g
     fi
     echo "Predicting novel variant impact..."
     python ${V2P_DIR}/scripts/predict.py $(basename $input_path .vcf)_annotations.pq

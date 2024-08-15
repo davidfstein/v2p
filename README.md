@@ -30,14 +30,14 @@ This only needs to be done once.
 cd bin/scikit-multilearn
 pip install .
 ```
-V2P also requires an installation of docker or singularity to be available on the system. See here for installation instructions: https://docs.docker.com/engine/install/.
+V2P also requires an installation of docker or singularity to be available on the system. See here for installation instructions: https://docs.docker.com/engine/install/. If using docker, be sure to add your user to the docker group: https://docs.docker.com/engine/install/linux-postinstall/.
 
 ### Download V2P data
 
 V2P relies on a large set of features to derive its predictions. These features are collected from Ensembl's VEP and other sources.
 In total, downloading the feature data requires ~564GB of free disk space. 
 
-Downloading data with the aws cli will be significantly faster than curl/wget. Both options are shown below, choose only one.
+Downloading data with the aws cli may be faster than curl/wget. Both options are shown below, choose only one.
 See https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html for aws cli configuration.
 
 #### AWS cli download
@@ -80,9 +80,9 @@ disk space requirement (~806GB).
 mkdir predictions
 cd predictions 
 aws s3 cp s3://v2p-data/snv_predictions.tar.gz - | pv | tar xzf -
-mv */db .
+mv */*db .
 aws s3 cp s3://v2p-data/indel_predictions.tar.gz - | pv | tar xzf -
-mv */db .
+mv */*db .
 ```
 
 #### wget/curl download
@@ -91,9 +91,9 @@ mv */db .
 mkdir predictions
 cd predictions 
 wget -O - https://v2p-data.s3.us-east-2.amazonaws.com/snv_predictions.tar.gz | tar xzf -
-mv */db .
+mv */*db .
 wget -O - https://v2p-data.s3.us-east-2.amazonaws.com/indel_predictions.tar.gz | tar xzf -
-mv */db .
+mv */*db .
 ```
 
 # Running V2P
@@ -109,9 +109,9 @@ Run ```bash get_predictions.sh -h``` for a description of the available paramete
 
 Example
 ```
-bash get_predictions.sh -i /path/to/input -o /path/to/output -a /path/to/annotations -p /path/to/precomputed_predictions -c 5
+bash get_predictions.sh -i /path/to/input -o /path/to/output -a /absolute/path/to/annotations -p /path/to/precomputed_predictions -c 5
 ```
 with singularity instead of docker
 ```
-bash get_predictions.sh -i /path/to/input -o /path/to/output -a /path/to/annotations -p /path/to/precomputed_predictions -c 5 -s
+bash get_predictions.sh -i /path/to/input -o /path/to/output -a /absolute/path/to/annotations -p /path/to/precomputed_predictions -c 5 -s
 ```
