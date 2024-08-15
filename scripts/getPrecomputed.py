@@ -100,14 +100,15 @@ for chrom in chroms:
     chrom_df = data.loc[data['#CHROM'] == chrom]
     snps = chrom_df.loc[((chrom_df['REF'].isin(NUCS)) & (chrom_df['ALT'].isin(NUCS)))]
     indels = chrom_df.loc[~chrom_df['ID'].isin(snps['ID'])]
-
+    
+    print(DATABASE_LOCATION + 'chrom' + str(chrom) + '_compressed.db')
     snp_dbconn = genomicsqlite.connect(
-        DATABASE_LOCATION + 'chrom' + str(chrom) + '_compressed.db',
+        DATABASE_LOCATION + '/chrom' + str(chrom) + '_compressed.db',
         read_only=True,
     )
 
     indel_dbconn = genomicsqlite.connect(
-        DATABASE_LOCATION + 'gnomad_chrom' + str(chrom) + '_compressed.db',
+        DATABASE_LOCATION + '/gnomad_chrom' + str(chrom) + '_compressed.db',
         read_only=True,
     )
 
