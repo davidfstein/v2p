@@ -100,7 +100,7 @@ mv */*db .
 
 The input to V2P is a VCF file containing the variants you wish to score in hg38 coordinates. 
 The VCF file must contain `#CHROM   POS ID  REF ALT QUAL    FILTER  INFO` in the header. 
-Other header lines are not required.
+Other header lines should not be included.
 
 To run V2P provide the path to the VCF, a path where the output will be stored, and the path to the downloaded features.
 You may optionally pass the path to the precomputed predictions, a number of CPUs to be used (default=1) and, 
